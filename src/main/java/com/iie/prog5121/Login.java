@@ -2,26 +2,7 @@ package com.iie.prog5121;
 
 import java.util.regex.Pattern;
 
-/**
- * Handles registration and login for the PROG5121 POE Part 1 task.
- *
- * <p>Validation rules implemented here:</p>
- * <ul>
- *     <li>Username - must contain an underscore ('_') and be no more than
- *         five characters long.</li>
- *     <li>Password - must be at least eight characters long and contain a
- *         capital letter, a number, and a special character.</li>
- *     <li>Cell phone number - must start with an international dialling
- *         code (e.g. "+27") followed by a number that is no more than ten
- *         digits long.</li>
- * </ul>
- *
- * <p><b>Note on assumptions:</b> the brief only lists username, password
- * and cell number as registration fields, but the login success message
- * needs a first and last name ("Welcome &lt;first name&gt;, &lt;last
- * name&gt; ..."), so first/last name have been added as extra registration
- * fields to make that message possible.</p>
- */
+
 public class Login {
 
     // ---- Standard system messages (wording taken from the brief / test tables) ----
