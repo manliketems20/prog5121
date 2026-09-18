@@ -90,7 +90,7 @@ public class Login {
     }
 
     /**
-     * Validates and, if everything is correct, stores a new user's
+     * Validates and, if everything is correct, stores a new users
      * registration details. Checks are performed in order: username, then
      * password, then cell phone number, returning the message for the
      * first check that fails - or a success message if all three pass.
