@@ -211,7 +211,7 @@ class LoginTest {
     }
 
     /**
-     * Test of getFirstName method, of class Login.
+     * Test of getFirstName method of class Login.
      */
     @Test
     public void testGetFirstName() {
@@ -224,7 +224,7 @@ class LoginTest {
     }
 
     /**
-     * Test of getLastName method, of class Login.
+     * Test of getLastName method of class Login.
      */
     @Test
     public void testGetLastName() {
