@@ -2,10 +2,7 @@ package com.iie.prog5121;
 
 import java.util.Scanner;
 
-/**
- * Console entry point for the Part 1 registration and login feature.
- * No GUI / JOptionPane is used, as required by the brief.
- */
+
 public class Main {
 
     public static void main(String[] args) {
