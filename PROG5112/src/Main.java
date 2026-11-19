@@ -1,4 +1,3 @@
-
 import java.util.Scanner;
 
 
@@ -53,66 +52,66 @@ public class Main {
         int choice;
 
         do {
- System.out.println("\n--- MENU ---");
- System.out.println("1. Send Message");
- System.out.println("2. Disregard Message");
- System.out.println("3. Store Message");
- System.out.println("4. Stored Messages Menu");
- System.out.println("5. Exit");
- choice = sc.nextInt();
- sc.nextLine();
+            System.out.println("\n--- MENU ---");
+            System.out.println("1. Send Message");
+            System.out.println("2. Disregard Message");
+            System.out.println("3. Store Message");
+            System.out.println("4. Stored Messages Menu");
+            System.out.println("5. Exit");
+            choice = scanner.nextInt();
+            scanner.nextLine();
 
- switch (choice) {
- case 1: handleMessage(sc, "send"); break;
- case 2: handleMessage(sc, "discard"); break;
- case 3: handleMessage(sc, "store"); break;
- case 4: storedMessagesMenu(sc); break;
- case 5: System.out.println("Exiting..."); break;
- default: System.out.println("Invalid choice.");
- }
- } while (choice != 5);
- }
+            switch (choice) {
+                case 1: handleMessage(scanner, "send"); break;
+                case 2: handleMessage(scanner, "discard"); break;
+                case 3: handleMessage(scanner, "store"); break;
+                case 4: storedMessagesMenu(scanner); break;
+                case 5: System.out.println("Exiting..."); break;
+                default: System.out.println("Invalid choice.");
+            }
+        } while (choice != 5);
+    }
 
- private static void handleMessage(Scanner sc, String option) {
- System.out.println("Enter Recipient number:");
- String recipient = sc.nextLine();
- System.out.println("Enter Message:");
- String text = sc.nextLine();
+    private static void handleMessage(Scanner sc, String option) {
+        System.out.println("Enter Recipient number:");
+        String recipient = sc.nextLine();
+        System.out.println("Enter Message:");
+        String text = sc.nextLine();
 
- Message msg = new Message(recipient, text);
- System.out.println(msg.sendMessage(option));
-System.out.println(msg.printMessage());
- }
+        Message msg = new Message(recipient, text);
+        System.out.println(msg.sendMessage(option));
+        System.out.println(msg.printMessage());
+    }
 
- private static void storedMessagesMenu(Scanner sc) {
- System.out.println("\n--- STORED MESSAGES MENU ---");
- System.out.println("1. Display all stored messages");
- System.out.println("2. Display longest stored message");
- System.out.println("3. Search by Message ID");
-System.out.println("4. Search by Recipient");
- System.out.println("5. Delete by Hash");
- System.out.println("6. Display full report");
+    private static void storedMessagesMenu(Scanner sc) {
+        System.out.println("\n--- STORED MESSAGES MENU ---");
+        System.out.println("1. Display all stored messages");
+        System.out.println("2. Display longest stored message");
+        System.out.println("3. Search by Message ID");
+        System.out.println("4. Search by Recipient");
+        System.out.println("5. Delete by Hash");
+        System.out.println("6. Display full report");
 
- int option = sc.nextInt();
- sc.nextLine();
+        int option = sc.nextInt();
+        sc.nextLine();
 
- switch (option) {
- case 1: Message.displayStoredMessages(); break;
- case 2: Message.displayLongestMessage(); break;
- case 3:
- System.out.println("Enter Message ID:");
- Message.searchByMessageID(sc.nextLine());
-break;
- case 4:
- System.out.println("Enter Recipient:");
- Message.searchByRecipient(sc.nextLine());
- break;
- case 5:
-System.out.println("Enter Message Hash:");
- Message.deleteByHash(sc.nextLine());
- break;
- case 6: Message.displayReport(); break;
- default: System.out.println("Invalid option.");
- }
- }
+        switch (option) {
+            case 1: Message.displayStoredMessages(); break;
+            case 2: Message.displayLongestMessage(); break;
+            case 3:
+                System.out.println("Enter Message ID:");
+                Message.searchByMessageID(sc.nextLine());
+                break;
+            case 4:
+                System.out.println("Enter Recipient:");
+                Message.searchByRecipient(sc.nextLine());
+                break;
+            case 5:
+                System.out.println("Enter Message Hash:");
+                Message.deleteByHash(sc.nextLine());
+                break;
+            case 6: Message.displayReport(); break;
+            default: System.out.println("Invalid option.");
+        }
+    }
 }
