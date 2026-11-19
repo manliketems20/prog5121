@@ -1,138 +1,117 @@
-import java.util.Random;
-public class Message {
-private static int totalMessages = 0;
+import java.util.Scanner;
 
- // Static collections for Part 3
-         private static List<Message> storedMessages = new ArrayList<>();
- private static List<Message> sentMessages = new ArrayList<>();
- private static List<Message> disregardedMessages = new ArrayList<>();
 
- private final String messageID;
- private final String recipient;
- private final String messageHash;
-    private final String message;
-    private String status;
+public class Main {
 
- // Constructor
-         public Message(String recipient, String message) {
- this.messageID = generateMessageID();
- this.recipient = recipient;
- this.message = message;
- this.messageHash = createMessageHash();
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        Login login = new Login();
+
+        System.out.println("=== Registration ===");
+
+        String username;
+        do {
+            System.out.print("Enter a username (must contain an underscore and be no more than five characters): ");
+            username = scanner.nextLine();
+            System.out.println(login.checkUserName(username) ? Login.USERNAME_SUCCESS : Login.USERNAME_FAIL);
+        } while (!login.checkUserName(username));
+
+        String password;
+        do {
+            System.out.print("Enter a password (min. 8 characters, a capital letter, a number and a special character): ");
+            password = scanner.nextLine();
+            System.out.println(login.checkPasswordComplexity(password) ? Login.PASSWORD_SUCCESS : Login.PASSWORD_FAIL);
+        } while (!login.checkPasswordComplexity(password));
+
+        String cellPhoneNumber;
+        do {
+            System.out.print("Enter your South African cell phone number (e.g. +27838968976): ");
+            cellPhoneNumber = scanner.nextLine();
+            System.out.println(login.checkCellPhoneNumber(cellPhoneNumber) ? Login.CELL_SUCCESS : Login.CELL_FAIL);
+        } while (!login.checkCellPhoneNumber(cellPhoneNumber));
+
+        System.out.print("Enter your first name: ");
+        String firstName = scanner.nextLine();
+        System.out.print("Enter your last name: ");
+        String lastName = scanner.nextLine();
+
+        String registrationMessage = login.registerUser(firstName, lastName, username, password, cellPhoneNumber);
+        System.out.println(registrationMessage);
+
+        System.out.println();
+        System.out.println("=== Login ===");
+        System.out.print("Enter your username: ");
+        String loginUsername = scanner.nextLine();
+        System.out.print("Enter your password: ");
+        String loginPassword = scanner.nextLine();
+
+        boolean success = login.loginUser(loginUsername, loginPassword);
+        System.out.println(login.returnLoginStatus(success));
+
+
+        int choice;
+
+        do {
+            System.out.println("\n--- MENU ---");
+            System.out.println("1. Send Message");
+            System.out.println("2. Disregard Message");
+            System.out.println("3. Store Message");
+            System.out.println("4. Stored Messages Menu");
+            System.out.println("5. Exit");
+            choice = scanner.nextInt();
+            scanner.nextLine();
+
+            switch (choice) {
+                case 1: handleMessage(scanner, "send"); break;
+                case 2: handleMessage(scanner, "discard"); break;
+                case 3: handleMessage(scanner, "store"); break;
+                case 4: storedMessagesMenu(scanner); break;
+                case 5: System.out.println("Exiting..."); break;
+                default: System.out.println("Invalid choice.");
+            }
+        } while (choice != 5);
+    }
+
+    private static void handleMessage(Scanner sc, String option) {
+        System.out.println("Enter Recipient number:");
+        String recipient = sc.nextLine();
+        System.out.println("Enter Message:");
+        String text = sc.nextLine();
+
+        Message msg = new Message(recipient, text);
+        System.out.println(msg.sendMessage(option));
+        System.out.println(msg.printMessage());
+    }
+
+    private static void storedMessagesMenu(Scanner sc) {
+        System.out.println("\n--- STORED MESSAGES MENU ---");
+        System.out.println("1. Display all stored messages");
+        System.out.println("2. Display longest stored message");
+        System.out.println("3. Search by Message ID");
+        System.out.println("4. Search by Recipient");
+        System.out.println("5. Delete by Hash");
+        System.out.println("6. Display full report");
+
+        int option = sc.nextInt();
+        sc.nextLine();
+
+        switch (option) {
+            case 1: Message.displayStoredMessages(); break;
+            case 2: Message.displayLongestMessage(); break;
+            case 3:
+                System.out.println("Enter Message ID:");
+                Message.searchByMessageID(sc.nextLine());
+                break;
+            case 4:
+                System.out.println("Enter Recipient:");
+                Message.searchByRecipient(sc.nextLine());
+                break;
+            case 5:
+                System.out.println("Enter Message Hash:");
+                Message.deleteByHash(sc.nextLine());
+                break;
+            case 6: Message.displayReport(); break;
+            default: System.out.println("Invalid option.");
+        }
+    }
 }
-
- // Generate random 10-digit ID
-         private String generateMessageID() {
- Random rand = new Random();
- StringBuilder id = new StringBuilder();
-for (int i = 0; i < 10; i++) {
- id.append(rand.nextInt(10));
- }
- return id.toString();
- }
-
-// Create hash: first 2 digits of ID + first + last word
-         private String createMessageHash() {
- String[] words = message.split(" ");
- String firstWord = words[0].toUpperCase();
- String lastWord = words[words.length - 1].toUpperCase();
- return messageID.substring(0, 2) + ":" + firstWord + lastWord;
- }
-
- // Handle sending, storing, or discarding
-        public String sendMessage(String option) {
- switch (option.toLowerCase()) {
- case "send":
- status = "Sent";
- totalMessages++;
- sentMessages.add(this);
- return "Message successfully sent";
-case "store":
- status = "Stored";
- storedMessages.add(this);
-return "Message successfully stored";
- case "discard":
- status = "Disregarded";
- disregardedMessages.add(this);
- return "Message disregarded";
-default:
- return "Invalid Option";
- }
-}
-
-public static int returnTotalMessages() {
- return totalMessages;
- }
-
- // Print message details
-         public String printMessage() {
- return "Message ID: " + messageID + "\n" +
-"Message Hash: " + messageHash + "\n" +
-"Recipient: " + recipient + "\n" +
-"Message: " + message + "\n" +
-"Status: " + status;
- }
-
-// Store message in JSON format
-         public JSONObject storeMessageJSON() {
- JSONObject obj = new JSONObject();
- obj.put("MessageID", messageID);
- obj.put("MessageHash", messageHash);
- obj.put("Recipient", recipient);
- obj.put("Message", message);
- obj.put("Status", status);
- return obj;
- }
-
- // --- Part 3 Stored Message Operations ---
-         public static void displayStoredMessages() {
- for (Message msg : storedMessages) {
-System.out.println("Recipient: " + msg.recipient);
- }
- }
-
- public static void displayLongestMessage() {
- Message longest = storedMessages.stream()
- .max(Comparator.comparingInt(m -> m.message.length()))
- .orElse(null);
- if (longest != null) {
- System.out.println("Longest Message: " + longest.message);
- }
- }
-
- public static void searchByMessageID(String id) {
- for (Message msg : storedMessages) {
- if (msg.messageID.equals(id)) {
- System.out.println("Recipient: " + msg.recipient + ", Message: " + msg.message);
- }
-}
- }
-
- public static void searchByRecipient(String recipient) {
- for (Message msg : storedMessages) {
- if (msg.recipient.equals(recipient)) {
-System.out.println(msg.message);
-}
- }
- }
-
-public static void deleteByHash(String hash) {
- storedMessages.removeIf(msg -> msg.messageHash.equals(hash));
-System.out.println("Message with hash " + hash + " deleted.");
- }
-
- public static void displayReport() {
- for (Message msg : storedMessages) {
- System.out.println(msg.printMessage());
- }
-}
-
-    // Getters
-         public String getMessageID() { return messageID; }
- public String getRecipient() { return recipient; }
- public String getMessage() { return message; }
-public String getMessageHash() { return messageHash; }
- public String getStatus() { return status; }
-}
-
-
